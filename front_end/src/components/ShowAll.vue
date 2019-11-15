@@ -105,7 +105,6 @@ export default {
   },
   mounted () {
     this.loadAll()
-
   },
   methods: {
     loadAll () {
