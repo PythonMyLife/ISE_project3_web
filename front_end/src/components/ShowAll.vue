@@ -4,24 +4,28 @@
       <el-input v-model="search" maxLength="25" size="medium" style="width: 300px" suffix-icon="el-icon-search" placeholder="输入物品名关键字搜索"/>
     </div>
     <div style="padding-top: 10px;" v-if="showAll">
-      <el-card style="padding-left: 20px">
-        <el-table :data="goodsData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))" style="width: 100%">
-          <el-table-column prop="name" label="物品名" align="center"></el-table-column>
-          <el-table-column prop="owner" label="抵押人" align="center"></el-table-column>
-          <el-table-column prop="status" label="状态" align="center">
-            <template slot-scope="scope">
-              <el-tag v-if="scope.row.status === 2">入库</el-tag>
-              <el-tag v-if="scope.row.status === 1" type="success">在库</el-tag>
-              <el-tag v-if="scope.row.status === 0" type="danger">出库</el-tag>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" align="center">
-            <template slot-scope="scope">
-              <el-button size="medium" type="primary" icon="el-icon-view" circle @click="handleDetail(scope.row)"></el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-card>
+      <el-row :gutter="20">
+        <el-col :span="12" :offset="2">
+          <el-card class="box-card" style="width: 900px;">
+            <el-table :data="goodsData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))" style="width: 100%">
+              <el-table-column prop="name" label="物品名" align="center"></el-table-column>
+              <el-table-column prop="owner" label="抵押人" align="center"></el-table-column>
+              <el-table-column prop="status" label="状态" align="center">
+                <template slot-scope="scope">
+                  <el-tag v-if="scope.row.status === 2">入库</el-tag>
+                  <el-tag v-if="scope.row.status === 1" type="success">在库</el-tag>
+                  <el-tag v-if="scope.row.status === 0" type="danger">出库</el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" align="center">
+                <template slot-scope="scope">
+                  <el-button size="medium" type="primary" icon="el-icon-view" circle @click="handleDetail(scope.row)"></el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-card>
+        </el-col>
+      </el-row>
     </div>
 <!--查看物品详情-->
     <div v-if="!showAll">
@@ -30,7 +34,9 @@
           <el-card class="box-card" style="width: 900px;">
             <div slot="header" class="clearfix">
               <span style="font-size: 16px;">物品信息</span>
-              <el-button style="float: right;" size="mini" type="primary" icon="el-icon-back" @click="showAll = true">返回</el-button>
+              <el-button style="float: right;" size="mini" type="danger" plain icon="el-icon-back" @click="showAll = true">返回</el-button>
+              <el-button size="mini" type="primary" plain icon="el-icon-view" @click="drawLine()">查看统计图表</el-button>
+              <el-button size="mini" type="primary" plain icon="el-icon-view" @click="showImage()">查看摄像头图像</el-button>
             </div>
             <el-form label-width="110px" :model="correntGoods" :inline="true">
               <el-form-item label="物品名">
@@ -51,6 +57,9 @@
                 <el-input v-model="correntGoods.content" type="textarea" :autosize="{ minRows: 2, maxRows: 5}" style="width: 715px;" disabled="true"></el-input>
               </el-form-item>
             </el-form>
+          </el-card>
+          <el-card class="box-card" style="width: 900px;">
+            <div id="myChart" :style="{width: '300px', height: '300px'}"></div>
           </el-card>
         </el-col>
       </el-row>
@@ -96,6 +105,7 @@ export default {
   },
   mounted () {
     this.loadAll()
+
   },
   methods: {
     loadAll () {
@@ -106,6 +116,26 @@ export default {
       // this.currentGoods = row
       this.getGoods(row)
       this.showAll = false
+    },
+    showImage () {
+    },
+    drawLine () {
+      // 基于准备好的dom，初始化echarts实例
+      let myChart = this.$echarts.init(document.getElementById('myChart'))
+      // 绘制图表
+      myChart.setOption({
+        title: { text: 'echart 使用实例' },
+        tooltip: {},
+        xAxis: {
+          data: ['半径1', '半径2', '半径3', '直径1', '直径2', '直径3']
+        },
+        yAxis: {},
+        series: [{
+          name: '数量',
+          type: 'bar',
+          data: [5, 20, 36, 10, 10, 20]
+        }]
+      })
     },
     goBack () {
       this.showAll = true
