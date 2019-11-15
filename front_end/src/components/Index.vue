@@ -68,6 +68,19 @@
         </keep-alive>
       </el-main>
     </el-container>
+    <el-dialog title="警报" :visible.sync="dialogFormVisible" width="400px">
+      <el-form >
+        <el-form-item label="设备" >
+          {{data.id}}
+        </el-form-item>
+        <el-form-item label="情况">
+          {{data.alertType}}
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="handleDetailFinish()">确定</el-button>
+      </div>
+    </el-dialog>
   </el-container>
 </template>
 
@@ -79,10 +92,16 @@ export default {
   data () {
     return {
       tabView: 'page1',
-      openList: ['1']
+      openList: ['1'],
+      dialogFormVisible: false,
+      message: 'a',
+      data: ''
     }
   },
   methods: {
+    handleDetailFinish () {
+      this.dialogFormVisible = false
+    },
     toIndex () {
       // let bodyFormData = new FormData()
       // let url = '/user-server/api/user/logout'
@@ -125,30 +144,6 @@ export default {
       this.openList[0] = id1
       this.tabView = `page${id2}`
     },
-    // handleModify () {
-    //   let bodyFormData = new FormData()
-    //   bodyFormData.set('username', this.userInfo.username)
-    //   bodyFormData.set('email', this.userInfo.email)
-    //   let url = '/user-server/api/user/changeEmail'
-    //   this.$axios({
-    //     method: 'post',
-    //     url: url,
-    //     data: bodyFormData,
-    //     config: { headers: { 'Content-type': 'multipart/form-data' } } }
-    //   ).then(response => {
-    //     if (response.data.login === 0) {
-    //       this.$router.push({ name: 'Login' })
-    //     } else {
-    //       if (response.data.change === 1) {
-    //         this.$alert('修改成功！')
-    //         sessionStorage.setItem('email', this.userInfo.email)
-    //         this.dialogFormVisible = false
-    //       } else {
-    //         this.$alert('修改失败！请重新登录再试')
-    //       }
-    //     }
-    //   })
-    // },
     loadData () {
       // this.userInfo.username = sessionStorage.getItem('username')
       // if (this.userInfo.username === '' || this.userInfo.username === null) {
@@ -195,6 +190,21 @@ export default {
   mounted () {
     this.loadData()
     this.exit()
+    let that = this
+    this.message = 'c'
+    const source = new EventSource('/stream-sse/connecttime')
+    source.onopen = function () {
+      that.message = 'connected'
+      window.console.log(that.message)
+    }
+
+    source.addEventListener('connecttime', function (event) {
+      // 测试成功，稳定sse时使用窗口
+      // that.dialogFormVisible = true
+      that.data = event.data
+      that.data = JSON.parse(that.data)
+      window.console.log(that.data)
+    }, false)
   }
 }
 </script>
