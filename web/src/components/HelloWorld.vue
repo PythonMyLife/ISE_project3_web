@@ -33,7 +33,6 @@
       const source = new EventSource('/stream-sse/connecttime');
       source.onopen = function () {
         that.message = 'connected';
-        that.handleMessage();
         window.console.log(that.message);
       };
 
