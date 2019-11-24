@@ -47,9 +47,9 @@
           <div align="center" style="padding-bottom: 15px;">
             <i class="fas fa-3x fa-user-circle text-center tm-icon"></i>
             <div style="clear:both"></div>
-            <el-tooltip class="item" effect="light" content="点击退出登录" placement="right">
-              <el-button id="logout" type="primary" plain size="mini" icon="el-icon-info" @click="logout()">管理员</el-button>
-            </el-tooltip>
+<!--            <el-tooltip class="item" effect="light" content="点击退出登录" placement="right">-->
+<!--              <el-button id="logout" type="primary" plain size="mini" icon="el-icon-info" @click="logout()">管理员</el-button>-->
+<!--            </el-tooltip>-->
             <div style="clear:both"></div>
           </div>
           <el-menu-item index="1" @click="toPage(1, 1)">
@@ -59,6 +59,10 @@
           <el-menu-item index="2" @click="toPage(2, 2)">
             <i class="el-icon-folder-opened"></i>
             <span slot="title" style="font-size: 16px">查看全部</span>
+          </el-menu-item>
+          <el-menu-item index="3" @click="toPage(3, 3)">
+            <i class="el-icon-folder-opened"></i>
+            <span slot="title" style="font-size: 16px">查看车流</span>
           </el-menu-item>
         </el-menu>
       </el-aside>
@@ -87,6 +91,7 @@
 <script>
 import page1 from './InWarehouse.vue'
 import page2 from './ShowAll.vue'
+import page3 from './showTraffic.vue'
 export default {
   name: 'Index',
   data () {
@@ -185,7 +190,8 @@ export default {
   },
   components: {
     page1,
-    page2
+    page2,
+    page3
   },
   mounted () {
     this.loadData()

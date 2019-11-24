@@ -87,7 +87,7 @@ export default {
     check () {
       let url = '/pledge/addConfirm'
       var news
-      this.$axios.get(url,{
+      this.$axios.get(url, {
         data: {
           'pledgeId': this.form.pledgeId,
           'value': this.form.value,
