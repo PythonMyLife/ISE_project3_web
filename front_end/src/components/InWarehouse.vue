@@ -10,16 +10,19 @@
             <el-form-item label="物品名">
               <el-input v-model="form.name"></el-input>
             </el-form-item>
-            <el-form-item label="在库起始时间">
+            <!--<el-form-item label="在库起始时间">
               <el-date-picker v-model="time" type="datetimerange" :picker-options="pickerOptions"
                               range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" align="right" value-format="yyyy-MM-dd HH:mm:ss">
               </el-date-picker>
+            </el-form-item>-->
+            <el-form-item label="货物ID">
+              <el-input v-model="form.pledgeId"></el-input>
             </el-form-item>
-            <el-form-item label="抵押人姓名">
-              <el-input v-model="form.owner"></el-input>
+            <el-form-item label="价值">
+              <el-input v-model="form.value"></el-input>
             </el-form-item>
-            <el-form-item label="抵押人联系方式">
-              <el-input v-model="form.phone"></el-input>
+            <el-form-item label="位置ID">
+              <el-input v-model="form.locationId"></el-input>
             </el-form-item>
             <el-form-item label="备注">
               <el-input v-model="form.content" type="textarea" :autosize="{ minRows: 2, maxRows: 5}" style="width: 715px;"></el-input>
@@ -42,9 +45,9 @@ export default {
     return {
       form: {
         name: '',
-        owner: '',
-        phone: '',
-        content: ''
+        pledgeId: '',
+        value: '',
+        locationId: ''
       },
       time: [],
       pickerOptions: {
@@ -82,15 +85,43 @@ export default {
     loadData () {
     },
     check () {
-      this.$confirm('此操作将入库该商品, 是否继续?', '提示', {
+      let url = '/pledge/addConfirm'
+      var news
+      this.$axios.get(url,{
+        data: {
+          'pledgeId': this.form.pledgeId,
+          'value': this.form.value,
+          'locationId': this.form.locationId,
+          'name': this.form.name
+        },
+        config: { headers: { 'Content-type': 'application/json' } } }
+      ).then(response => {
+        console.log(response.data)
+        news = response.data.toString()
+      })
+      this.$confirm(news, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         this.submit()
-        this.$message({
-          type: 'success',
-          message: '商品入库成功!'
+        let url = '/pledge/add'
+        this.$axios({
+          method: 'post',
+          url: url,
+          data: {
+            'pledgeId': this.form.pledgeId,
+            'value': this.form.value,
+            'locationId': this.form.locationId,
+            'name': this.form.name
+          },
+          config: { headers: { 'Content-type': 'application/json' } } }
+        ).then(response => {
+          console.log(response.data)
+          this.$message({
+            type: 'success',
+            message: '入库成功'
+          })
         })
       }).catch(() => {
         this.$message({

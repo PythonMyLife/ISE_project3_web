@@ -49,7 +49,7 @@ module.exports = {
     disableHostCheck: true,
     proxy: {
       '': {
-        target: 'http://202.120.40.8:30859', // 对应自己的接口
+        target: 'http://106.15.225.249:3031', // 对应自己的接口
         disableHostCheck: true,
         changeOrigin: true,
         ws: true,

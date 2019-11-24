@@ -200,7 +200,7 @@ export default {
 
     source.addEventListener('connecttime', function (event) {
       // 测试成功，稳定sse时使用窗口
-      // that.dialogFormVisible = true
+      that.dialogFormVisible = true
       that.data = event.data
       that.data = JSON.parse(that.data)
       window.console.log(that.data)
