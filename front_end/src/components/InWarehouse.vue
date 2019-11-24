@@ -39,6 +39,7 @@
 </template>
 
 <script>
+import Qs from 'qs'
 export default {
   name: 'InWarehouse',
   data () {
@@ -87,15 +88,18 @@ export default {
     check () {
       let url = '/pledge/addConfirm'
       var news
-      this.$axios.get(url,{
-        data: {
-          'pledgeId': this.form.pledgeId,
-          'value': this.form.value,
-          'locationId': this.form.locationId,
-          'name': this.form.name
+      this.$axios.get(url, {
+        params: {
+          pledgeId: this.form.pledgeId,
+          value: this.form.value,
+          locationId: this.form.locationId,
+          name: this.form.name
         },
-        config: { headers: { 'Content-type': 'application/json' } } }
-      ).then(response => {
+        paramsSerializer: function (params) {
+          return Qs.stringify(params, { arrayFormat: 'indices' })
+        },
+        headers: { 'Content-type': 'application/json' }
+      }).then(response => {
         console.log(response.data)
         news = response.data.toString()
       })
