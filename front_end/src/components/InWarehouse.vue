@@ -39,7 +39,6 @@
 </template>
 
 <script>
-import Qs from 'qs'
 export default {
   name: 'InWarehouse',
   data () {
@@ -88,49 +87,48 @@ export default {
     check () {
       let url = '/pledge/addConfirm'
       var news
-      this.$axios.get(url, {
-        params: {
-          pledgeId: this.form.pledgeId,
-          value: this.form.value,
-          locationId: this.form.locationId,
-          name: this.form.name
+      this.$axios({
+        method: 'post',
+        url: url,
+        data: {
+          'pledgeId': this.form.pledgeId,
+          'value': this.form.value,
+          'locationId': this.form.locationId,
+          'name': this.form.name
         },
-        paramsSerializer: function (params) {
-          return Qs.stringify(params, { arrayFormat: 'indices' })
-        },
-        headers: { 'Content-type': 'application/json' }
+        config: { headers: { 'Content-type': 'application/json' } }
       }).then(response => {
         console.log(response.data)
         news = response.data.toString()
-      })
-      this.$confirm(news, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.submit()
-        let url = '/pledge/add'
-        this.$axios({
-          method: 'post',
-          url: url,
-          data: {
-            'pledgeId': this.form.pledgeId,
-            'value': this.form.value,
-            'locationId': this.form.locationId,
-            'name': this.form.name
-          },
-          config: { headers: { 'Content-type': 'application/json' } } }
-        ).then(response => {
-          console.log(response.data)
-          this.$message({
-            type: 'success',
-            message: '入库成功'
+        this.$confirm(news, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.submit()
+          let url = '/pledge/add'
+          this.$axios({
+            method: 'post',
+            url: url,
+            data: {
+              'pledgeId': this.form.pledgeId,
+              'value': this.form.value,
+              'locationId': this.form.locationId,
+              'name': this.form.name
+            },
+            config: { headers: { 'Content-type': 'application/json' } } }
+          ).then(response => {
+            console.log(response.data)
+            this.$message({
+              type: 'success',
+              message: '入库成功'
+            })
           })
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消入库'
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消入库'
+          })
         })
       })
     },

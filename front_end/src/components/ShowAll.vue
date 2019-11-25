@@ -59,7 +59,7 @@
             </el-form>
           </el-card>
           <el-card class="box-card" style="width: 900px;">
-            <div id="myChart" :style="{width: '300px', height: '300px'}"></div>
+            <div id="myChart" :style="{width: '700px', height: '300px'}"></div>
           </el-card>
         </el-col>
       </el-row>
@@ -143,17 +143,66 @@ export default {
       let myChart = this.$echarts.init(document.getElementById('myChart'))
       // 绘制图表
       myChart.setOption({
-        title: { text: 'echart 使用实例' },
         tooltip: {},
         xAxis: {
-          data: ['半径1', '半径2', '半径3', '直径1', '直径2', '直径3']
+          name: '日期',
+          nameLocation: 'end',
+          nameTextStyle: {
+            padding: -24
+          },
+          data: ['2018-12-01 01:00:00', '2018-12-01 02:00:00', '2018-12-01 03:00:00', '2018-12-01 04:00:00', '2018-12-01 05:00:00'],
+          type: 'category',
+          boundaryGap: false
         },
-        yAxis: {},
-        series: [{
-          name: '数量',
-          type: 'bar',
-          data: [5, 20, 36, 10, 10, 20]
-        }]
+        grid: [{
+          left: '20%',
+          bottom: '20%',
+          top: '20%',
+          right: '0%'
+        }],
+        dataZoom: [
+          { // 这个dataZoom组件，默认控制x轴。
+            type: 'slider', // 这个 dataZoom 组件是 slider 型 dataZoom 组件
+            start: 0, // 左边在 0% 的位置。
+            end: 20 // 右边在 30% 的位置。
+          }
+        ],
+        color: ['#dcb7fe'],
+        yAxis: {
+          type: 'value',
+          name: '分数',
+          nameLocation: 'end',
+          nameTextStyle: {
+            padding: -8
+          },
+          axisLabel: {
+            formatter: function (value) {
+              var texts = []
+              if (value === 1) {
+                texts.push('入库中')
+              } else if (value === 2) {
+                texts.push('已入库')
+              } else if (value === 3) {
+                texts.push('出库中')
+              } else if (value === 4) {
+                texts.push('已出库')
+              } else if (value === 5) {
+                texts.push('V')
+              } else if (value === 6) {
+                texts.push('劣V')
+              } else if (value === 0) {
+                texts.push('断流')
+              }
+              return texts
+            }
+          }
+        },
+        series: [
+          {
+            data: [1, 2, 3, 4, 5],
+            type: 'line'
+          }
+        ]
       })
     },
     goBack () {
