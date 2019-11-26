@@ -20,6 +20,7 @@
               <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
                   <el-button size="medium" type="primary" icon="el-icon-view" circle @click="handleDetail(scope.row)"></el-button>
+                  <el-button size="medium" type="danger" icon="el-icon-delete" circle @click="handleDelete(scope.row)"></el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -42,29 +43,37 @@
               <el-form-item label="物品名">
                 <el-input v-model="correntGoods.name" disabled="true"></el-input>
               </el-form-item>
-              <el-form-item label="在库起始时间">
-                <el-date-picker v-model="correntGoods.time" type="datetimerange" :picker-options="pickerOptions"
-                                range-separator="至" start-placeholder="correntGoods.warehouseInTime[0]" end-placeholder="correntGoods.warehouseInTime[1]" align="right" value-format="yyyy-MM-dd HH:mm:ss" disabled="true">
-                </el-date-picker>
+<!--              <el-form-item label="在库起始时间">-->
+<!--                <el-date-picker v-model="correntGoods.location.inwarehousingTime" type="datetimerange" :picker-options="pickerOptions"-->
+<!--                                range-separator="至" start-placeholder="correntGoods.warehouseInTime[0]" end-placeholder="correntGoods.warehouseInTime[1]" align="right" value-format="yyyy-MM-dd HH:mm:ss" disabled="true">-->
+<!--                </el-date-picker>-->
+<!--              </el-form-item>-->
+              <el-form-item label="温度">
+                <el-input v-model="correntGoods.t" disabled="true"></el-input>
               </el-form-item>
-              <el-form-item label="物理状态">
-                <el-input v-model="correntGoods.physicalState" disabled="true"></el-input>
+              <el-form-item label="湿度">
+                <el-input v-model="correntGoods.s" disabled="true"></el-input>
+              </el-form-item>
+              <el-form-item label="逻辑状态">
+                <el-input v-model="correntGoods.logicalState" disabled="true"></el-input>
               </el-form-item>
               <el-form-item label="位置信息">
                 <el-input v-model="correntGoods.location.locationId" disabled="true"></el-input>
               </el-form-item>
-              <el-form-item label="备注">
-                <el-input v-model="correntGoods.content" type="textarea" :autosize="{ minRows: 2, maxRows: 5}" style="width: 715px;" disabled="true"></el-input>
+              <el-form-item label="描述">
+                <el-input v-model="correntGoods.location.description" type="textarea" :autosize="{ minRows: 2, maxRows: 5}" style="width: 715px;" disabled="true"></el-input>
               </el-form-item>
             </el-form>
           </el-card>
-          <el-card class="box-card" style="width: 900px;">
+          <el-card class="box-card" style="width: 900px;" >
             <div id="myChart" :style="{width: '700px', height: '300px'}"></div>
           </el-card>
-          <el-card class="box-card" style="width: 900px;" id="myCamera">
+          <el-card class="box-card" style="width: 900px;" id="myCamera" href="#myCamera" v-if="showDetail==2">
             <span v-for="(x, index) in pictures" :key="index">
               <img :src="x['picture']" style="width: 280px;">
             </span>
+          </el-card>
+          <el-card id="Camera" href="#Camera" class="box-card" style="width: 900px;height: 300px">
           </el-card>
         </el-col>
       </el-row>
@@ -79,6 +88,7 @@ export default {
     return {
       search: '',
       showAll: true,
+      showDetail: 1,
       correntGoods: {
         name: '钢卷',
         time: [
@@ -141,7 +151,24 @@ export default {
       this.getGoods(row)
       this.showAll = false
     },
+    handleDelete (row) {
+      let url = 'http://106.15.225.249:3031/pledge/exwarehousing'
+      this.$axios.get(url, {
+        params: {
+          id: row.pledgeId
+        }
+      }
+      ).then(response => {
+        console.log(response)
+        this.$message({
+          type: 'success',
+          message: response.data
+        })
+      })
+    },
     showImage () {
+      this.showDetail = 2
+      document.querySelector('#Camera').scrollIntoView(true)
       let url = 'http://106.15.225.249:3031/pledge/image'
       this.$axios({
         method: 'get',
@@ -154,6 +181,7 @@ export default {
       })
     },
     showChart () {
+      this.showDetail = 1
       // 基于准备好的dom，初始化echarts实例
       let myChart = this.$echarts.init(document.getElementById('myChart'))
       // 绘制图表
@@ -165,7 +193,13 @@ export default {
           nameTextStyle: {
             padding: -24
           },
-          data: ['2018-12-01 01:00:00', '2018-12-01 02:00:00', '2018-12-01 03:00:00', '2018-12-01 04:00:00', '2018-12-01 05:00:00'],
+          data: ['2018-12-01 00:01:00', '2018-12-01 00:02:00', '2018-12-01 00:03:00', '2018-12-01 00:04:00', '2018-12-01 00:05:00',
+            '2018-12-01 00:06:00', '2018-12-01 00:07:00', '2018-12-01 00:08:00', '2018-12-01 00:09:00', '2018-12-01 00:10:00',
+            '2018-12-01 00:11:00', '2018-12-01 00:12:00', '2018-12-01 00:13:00', '2018-12-01 00:14:00', '2018-12-01 00:15:00',
+            '2018-12-01 00:16:00', '2018-12-01 00:17:00', '2018-12-01 00:18:00', '2018-12-01 00:19:00', '2018-12-01 00:20:00',
+            '2018-12-01 00:21:00', '2018-12-01 00:22:00', '2018-12-01 00:23:00', '2018-12-01 00:24:00', '2018-12-01 00:25:00',
+            '2018-12-01 00:26:00', '2018-12-01 00:27:00', '2018-12-01 00:28:00', '2018-12-01 00:29:00', '2018-12-30 00:30:00',
+            '2018-12-01 00:31:00', '2018-12-01 00:32:00', '2018-12-01 00:33:00', '2018-12-01 00:34:00', '2018-12-01 00:35:00'],
           type: 'category',
           boundaryGap: false
         },
@@ -194,19 +228,9 @@ export default {
             formatter: function (value) {
               var texts = []
               if (value === 1) {
-                texts.push('入库中')
+                texts.push('稳定')
               } else if (value === 2) {
-                texts.push('已入库')
-              } else if (value === 3) {
-                texts.push('出库中')
-              } else if (value === 4) {
-                texts.push('已出库')
-              } else if (value === 5) {
-                texts.push('V')
-              } else if (value === 6) {
-                texts.push('劣V')
-              } else if (value === 0) {
-                texts.push('断流')
+                texts.push('有震动')
               }
               return texts
             }
@@ -214,7 +238,7 @@ export default {
         },
         series: [
           {
-            data: [1, 2, 3, 4, 5],
+            data: [1, 1, 2, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2],
             type: 'line'
           }
         ]
