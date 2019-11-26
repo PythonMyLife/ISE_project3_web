@@ -43,11 +43,6 @@
               <el-form-item label="物品名">
                 <el-input v-model="correntGoods.name" disabled="true"></el-input>
               </el-form-item>
-<!--              <el-form-item label="在库起始时间">-->
-<!--                <el-date-picker v-model="correntGoods.location.inwarehousingTime" type="datetimerange" :picker-options="pickerOptions"-->
-<!--                                range-separator="至" start-placeholder="correntGoods.warehouseInTime[0]" end-placeholder="correntGoods.warehouseInTime[1]" align="right" value-format="yyyy-MM-dd HH:mm:ss" disabled="true">-->
-<!--                </el-date-picker>-->
-<!--              </el-form-item>-->
               <el-form-item label="温度">
                 <el-input v-model="correntGoods.t" disabled="true"></el-input>
               </el-form-item>
@@ -90,31 +85,31 @@ export default {
       showAll: true,
       showDetail: 1,
       correntGoods: {
-        name: '钢卷',
-        time: [
-          '2019-11-15 00:44:53',
-          '2020-02-13 00:44:53'
-        ],
-        owner: '张三',
-        phone: '1234567890',
-        content: '无'
+        // name: '钢卷',
+        // time: [
+        //   '2019-11-15 00:44:53',
+        //   '2020-02-13 00:44:53'
+        // ],
+        // owner: '张三',
+        // phone: '1234567890',
+        // content: '无'
       },
       goodsData: [
-        {
-          name: '钢卷',
-          owner: '张三',
-          status: 0
-        },
-        {
-          name: '钢卷',
-          owner: '张三',
-          status: 1
-        },
-        {
-          name: '钢卷',
-          owner: '张三',
-          status: 2
-        }
+        // {
+        //   name: '钢卷',
+        //   pledgeId: 0,
+        //   status: 0
+        // },
+        // {
+        //   name: '钢卷',
+        //   pledgeId: 1,
+        //   status: 1
+        // },
+        // {
+        //   name: '钢卷',
+        //   pledgeId: 2,
+        //   status: 2
+        // }
       ],
       pictures: []
     }
