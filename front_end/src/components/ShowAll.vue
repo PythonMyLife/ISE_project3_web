@@ -34,8 +34,8 @@
           <el-card class="box-card" style="width: 900px;">
             <div slot="header" class="clearfix">
               <span style="font-size: 16px;">物品信息</span>
-              <el-button style="float: right;" size="mini" type="danger" plain icon="el-icon-back" @click="showAll = true">返回</el-button>
-              <el-button size="mini" type="primary" plain icon="el-icon-view" @click="drawLine()">查看统计图表</el-button>
+              <el-button style="float: right;" size="mini" type="danger" plain icon="el-icon-back" @click="goBack()">返回</el-button>
+              <el-button size="mini" type="primary" plain icon="el-icon-view" @click="showChart()">查看统计图表</el-button>
               <el-button size="mini" type="primary" plain icon="el-icon-view" @click="showImage()">查看摄像头图像</el-button>
             </div>
             <el-form label-width="110px" :model="correntGoods" :inline="true">
@@ -60,6 +60,11 @@
           </el-card>
           <el-card class="box-card" style="width: 900px;">
             <div id="myChart" :style="{width: '700px', height: '300px'}"></div>
+          </el-card>
+          <el-card class="box-card" style="width: 900px;" id="myCamera">
+            <span v-for="(x, index) in pictures" :key="index">
+              <img :src="x['picture']" style="width: 280px;">
+            </span>
           </el-card>
         </el-col>
       </el-row>
@@ -100,7 +105,8 @@ export default {
           owner: '张三',
           status: 2
         }
-      ]
+      ],
+      pictures: []
     }
   },
   mounted () {
@@ -132,13 +138,22 @@ export default {
       })
     },
     handleDetail (row) {
-      // this.currentGoods = row
       this.getGoods(row)
       this.showAll = false
     },
     showImage () {
+      let url = 'http://106.15.225.249:3031/pledge/image'
+      this.$axios({
+        method: 'get',
+        url: url }
+      ).then(response => {
+        this.pictures = response.data
+        for (let i = 0; i < this.pictures.length; i++) {
+          this.pictures[i]['picture'] = 'data:image/jpg;base64,' + this.pictures[i]['picture']
+        }
+      })
     },
-    drawLine () {
+    showChart () {
       // 基于准备好的dom，初始化echarts实例
       let myChart = this.$echarts.init(document.getElementById('myChart'))
       // 绘制图表
@@ -206,6 +221,7 @@ export default {
       })
     },
     goBack () {
+      this.pictures = []
       this.showAll = true
     }
   }

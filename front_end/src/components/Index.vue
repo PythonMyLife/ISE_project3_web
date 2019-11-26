@@ -91,7 +91,7 @@
 <script>
 import page1 from './InWarehouse.vue'
 import page2 from './ShowAll.vue'
-import page3 from './showTraffic.vue'
+import page3 from './ShowTraffic.vue'
 export default {
   name: 'Index',
   data () {

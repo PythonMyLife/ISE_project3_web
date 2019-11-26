@@ -4,17 +4,17 @@
       <el-input v-model="search" maxLength="25" size="medium" style="width: 300px" suffix-icon="el-icon-search" placeholder="输入车牌号搜索"/>
       <el-row>
         <template>
-          <p>
-            起始时间：
+          <p style="font-size: 16px; padding-top: 10px;">
+            起始时间:
             <el-input v-model="starttime" type="date" size="mini" style="width: 150px;"/>
-            终止时间：
+            终止时间:
             <el-input v-model="endtime"   type="date" size="mini" style="width: 150px;"/>
             <el-button size="small" @click="statistics()">确定</el-button>
           </p>
         </template>
       </el-row>
     </div>
-    <div style="padding-top: 10px;">
+    <div>
       <el-row :gutter="20">
         <el-col :span="12" :offset="2">
           <el-card class="box-card" style="width: 900px;">
